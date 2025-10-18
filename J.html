@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SC FINAL - Roblox Store</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg1: #0d1b2a;
+  --bg2: #1b263b;
+  --accent: #00b4d8;
+  --text: #e0f7fa;
+  --scroll: #00b4d8;
+  --scroll-track: #14213d;
+  --transition: 0.3s ease;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 15px; }
+::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 15px; }
+::-webkit-scrollbar-track { background: var(--scroll-track); }
+
+body {
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  padding: 15px 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.navbar h1 {
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+.nav-links {
+  display: flex;
+  gap: 25px;
+}
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.nav-links a:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 101;
+  transition: var(--transition);
+}
+.hamburger div {
+  width: 30px;
+  height: 3px;
+  background: var(--text);
+  margin: 4px 0;
+  border-radius: 3px;
+  transition: all 0.4s ease;
+}
+/* Animasi aktif (jadi X) */
+.hamburger.active div:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.hamburger.active div:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active div:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  right: -250px;
+  top: 0;
+  width: 250px;
+  height: 100vh;
+  background: rgba(10,20,40,0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: -4px 0 15px rgba(0,0,0,0.3);
+  padding-top: 70px;
+  transition: right 0.4s ease;
+  z-index: 99;
+}
+.sidebar a {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+.sidebar a:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--accent);
+  transform: translateX(5px);
+}
+
+/* Section */
+section {
+  min-height: 100vh;
+  padding: 100px 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Home */
+#home h2 {
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+#typing {
+  border-right: 2px solid var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--accent); }
+}
+
+#home p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #cce3f0;
+}
+
+/* Produk */
+#produk {
+  width: 100%;
+  padding: 100px 10%;
+  text-align: center;
+  position: relative;
+}
+#produk h2 {
+  font-size: 2rem;
+  color: var(--accent);
+  margin-bottom: 40px;
+}
+
+/* Produk grid */
+.produk-grid {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+  transition: transform 0.3s ease;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+/* Card */
+.card {
+  width: 80%;
+  background: rgba(255,255,255,0.08);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  overflow: hidden;
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 20px var(--accent);
+}
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.card-content {
+  padding: 15px;
+}
+.card-content h3 {
+  color: var(--text);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+.card-content p {
+  color: #a7c7e7;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+.card-content button {
+  background: var(--accent);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.card-content button:hover {
+  background: #0096c7;
+  transform: scale(1.05);
+}
+
+/* Panah */
+.arrow {
+  position: absolute;
+  top: 55%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: var(--accent);
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  padding: 15px;
+  transition: 0.3s;
+  z-index: 10;
+}
+.arrow:hover {
+  background: var(--accent);
+  color: var(--bg1);
+}
+.arrow.left { left: 30px; }
+.arrow.right { right: 30px; }
+
+/* Contact */
+#contact {
+  margin-top: 100px;
+  text-align: center;
+  position: relative;
+}
+#contact h2 {
+  font-size: 2rem;
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+#contact form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 90%;
+  max-width: 400px;
+  margin-top: 30px;
+}
+#contact input, #contact textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+#contact button {
+  background: var(--accent);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  transition: var(--transition);
+}
+#contact button:hover {
+  background: #0096c7;
+  transform: scale(1.05);
+}
+
+/* Popup Notification */
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(10, 30, 50, 0.95);
+  color: var(--text);
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px var(--accent);
+  display: none;
+  z-index: 10;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -40%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* Tombol To Top */
+#toTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 2rem;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  display: none;
+  transition: all 0.4s ease;
+  z-index: 150;
+}
+#toTop:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--accent);
+}
+
+/* Desktop mode: horizontal scroll */
+@media (min-width: 1024px) {
+  .produk-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 30px;
+    padding-bottom: 10px;
+  }
+  .card img {
+    width: 200px;
+  }
+  .produk-grid::-webkit-scrollbar { height: 8px; }
+  .produk-grid::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 10px; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  section { padding: 80px 10%; }
+  .arrow { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <h1>Risxz Store</h1>
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#produk">Produk</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="hamburger" onclick="toggleSidebar()">
+    <div></div><div></div><div></div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <a href="#home" onclick="toggleSidebar()">🏠 Home</a>
+  <a href="#produk" onclick="toggleSidebar()">🛍️ Produk</a>
+  <a href="#contact" onclick="toggleSidebar()">📩 Contact</a>
+</div>
+
+<!-- Home -->
+<section id="home">
+  <h2><span id="typing">Selamat Datang di Risxz Store</span></h2>
+  <p>Tempat jual beli item Roblox termurah, cepat, dan terpercaya!</p>
+</section>
+
+<!-- Produk -->
+<section id="produk">
+  <h2>Daftar Produk</h2>
+  <div class="arrow left" onclick="scrollProduk(-1)">❮</div>
+  <div class="arrow right" onclick="scrollProduk(1)">❯</div>
+
+  <div class="produk-grid" id="produkGrid">
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/0b186b58a6788a6cb59b020777a3b28a/420/420/Image/Png">
+      <div class="card-content"><h3>💎 Robux Murah</h3><p>Top up cepat dan terpercaya.</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/0b186b58a6788a6cb59b020777a3b28a/420/420/Image/Png">
+      <div class="card-content"><h3>💎 Robux Murah</h3><p>Top up cepat dan terpercaya.</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/38e67dc30b2ac2e8cf64c0d07ab72a5b/420/420/Image/Png">
+      <div class="card-content"><h3>🎁 Gamepass Custom</h3><p>Buat gamepass sesuai keinginanmu.</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/38e67dc30b2ac2e8cf64c0d07ab72a5b/420/420/Image/Png">
+      <div class="card-content"><h3>🎁 Gamepass Custom</h3><p>Buat gamepass sesuai keinginanmu.</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/83b74e19b7bba0a90967661cb76433cf/420/420/Image/Png">
+      <div class="card-content"><h3>🧠 Script Premium</h3><p>Script lokal dan hub terbaik!</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/83b74e19b7bba0a90967661cb76433cf/420/420/Image/Png">
+      <div class="card-content"><h3>🧠 Script Premium</h3><p>Script lokal dan hub terbaik!</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/6b3f99ac4e39ab3e247fc4030af73df5/420/420/Image/Png">
+      <div class="card-content"><h3>🚀 Speed Boost</h3><p>Tambah kecepatan karakter kamu!</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/6b3f99ac4e39ab3e247fc4030af73df5/420/420/Image/Png">
+      <div class="card-content"><h3>🚀 Speed Boost</h3><p>Tambah kecepatan karakter kamu!</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/6b3f99ac4e39ab3e247fc4030af73df5/420/420/Image/Png">
+      <div class="card-content"><h3>🚀 Speed Boost</h3><p>Tambah kecepatan karakter kamu!</p><button>Beli Sekarang</button></div>
+    </div>
+    <div class="card">
+      <img src="https://tr.rbxcdn.com/6b3f99ac4e39ab3e247fc4030af73df5/420/420/Image/Png">
+      <div class="card-content"><h3>🚀 Speed Boost</h3><p>Tambah kecepatan karakter kamu!</p><button>Beli Sekarang</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <h2>Hubungi Kami</h2>
+  <p>Kirim pesan langsung ke Discord admin kami!</p>
+  <form id="contactForm">
+    <input type="text" id="nama" placeholder="Nama kamu" required>
+    <textarea id="pesan" placeholder="Tulis pesanmu..." required></textarea>
+    <button type="submit">Kirim ke Discord</button>
+  </form>
+  <div id="popup" class="popup"></div>
+  <p style="margin-top:30px;opacity:0.8;">© 2025 RBLX Store | All rights reserved.</p>
+</section>
+
+<!-- Tombol To Top -->
+<button id="toTop"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+// Sidebar toggle + animasi hamburger
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const hamburger = document.querySelector(".hamburger");
+  const isOpen = sidebar.style.right === "0px";
+  sidebar.style.right = isOpen ? "-250px" : "0px";
+  hamburger.classList.toggle("active", !isOpen);
+}
+
+// Scroll Produk
+function scrollProduk(direction) {
+  const grid = document.getElementById("produkGrid");
+  grid.scrollBy({ left: direction * 300, behavior: "smooth" });
+}
+
+// Auto-scroll horizontal
+setInterval(() => {
+  const grid = document.getElementById("produkGrid");
+  if (window.innerWidth >= 1024) grid.scrollBy({ left: 1, behavior: "smooth" });
+}, 30);
+
+// Tombol To Top
+const toTop = document.getElementById("toTop");
+window.addEventListener("scroll", () => {
+  toTop.style.display = window.scrollY > 400 ? "block" : "none";
+});
+toTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// Discord Webhook
+const webhookURL = "https://discord.com/api/webhooks/1429032753181098066/IfMs0Lv5E0zuFJ1Rc6hBV80n_RAsWOFhZtWfEpyFyh2YO_YhHs-XViuYkFTUV9K11exH";
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nama = document.getElementById("nama").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
+  const popup = document.getElementById("popup");
+
+  const data = {
+    username: "Risxz Store Bot 🤖",
+    avatar_url: "https://melodic-apricot-yc1gwclw0e.edgeone.app/Profil.png",
+    embeds: [{
+      title: "📩 Pesan dari pengunjung",
+      color: 3447003,
+      fields: [
+        { name: "Nama:", value: nama },
+        { name: "Pesan:", value: pesan }
+      ],
+      footer: { text: "RBLX Store • Notifikasi Otomatis", icon_url: "https://melodic-apricot-yc1gwclw0e.edgeone.app/Profil.png" },
+      timestamp: new Date().toISOString()
+    }]
+  };
+
+  try {
+    const res = await fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    popup.textContent = res.ok ? "✅ Pesan berhasil dikirim!" : "⚠️ Gagal mengirim pesan!";
+    popup.style.display = "block";
+    popup.style.background = res.ok ? "rgba(0,100,0,0.9)" : "rgba(100,0,0,0.9)";
+    if (res.ok) e.target.reset();
+  } catch {
+    popup.textContent = "❌ Terjadi kesalahan koneksi.";
+    popup.style.display = "block";
+    popup.style.background = "rgba(100,0,0,0.9)";
+  }
+  setTimeout(() => popup.style.display = "none", 3000);
+});
+
+// amimasi text typing
+const typingText = "Selamat Datang di Risxz Store";
+const typingElement = document.getElementById("typing");
+let index = 0;
+let forward = true;
+
+function typeLoop() {
+  if(forward) {
+    typingElement.textContent = typingText.substring(0, index + 1);
+    index++;
+    if(index === typingText.length) forward = false;
+  } else {
+    typingElement.textContent = typingText.substring(0, index - 1);
+    index--;
+    if(index === 0) forward = true;
+  }
+  setTimeout(typeLoop, 130); // kecepatan mengetik/hapus
+}
+
+window.addEventListener("load", typeLoop);
+</script>
+</body>
+</html>
